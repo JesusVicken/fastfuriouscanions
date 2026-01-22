@@ -12,10 +12,9 @@ gsap.registerPlugin(ScrollTrigger)
 // Frases focadas em aventura e venda
 const phrases = [
     "Descubra o Inexplorado",
-    "Adrenalina Pura nas Cachoeiras",
-    "Pacotes de Canionismo Exclusivos",
+    "Adrenalina Pura",
+    "Pacotes de Canionismo",
     "Supere seus Limites",
-    "Reserve sua Próxima Aventura"
 ]
 
 export default function HeroCanyoning() {
@@ -126,7 +125,7 @@ export default function HeroCanyoning() {
                     className="mt-8 z-30"
                 >
                     <a
-                        href="https://wa.me/5561999999999?text=Olá!%20Vi%20o%20site%20e%20quero%20saber%20sobre%20os%20pacotes%20de%20canionismo."
+                        href="https://wa.me/5561991557030?text=Olá!%20Vi%20o%20site%20e%20quero%20saber%20sobre%20os%20pacotes%20de%20canionismo."
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group relative inline-flex items-center gap-3 px-8 py-4 bg-orange-600 text-white rounded-full overflow-hidden transition-all duration-300 hover:bg-orange-500 hover:scale-105 shadow-[0_0_20px_rgba(234,88,12,0.5)]"

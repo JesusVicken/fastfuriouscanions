@@ -1,16 +1,21 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Image, { StaticImageData } from "next/image"; // Importe StaticImageData para tipagem
 import {
     CheckCircle2,
     ArrowRight,
-    Activity,
     ShieldCheck,
-    Sparkles
+    MapPin,
+    Mountain,
 } from "lucide-react";
 
-// --- HOOK DE PARALLAX PERSONALIZADO ---
-// Garante o efeito visual sem depender de bibliotecas externas que podem falhar
+// --- IMPORTE SUAS IMAGENS AQUI ---
+import kadu5Img from "../../../public/kadu5.jpg";
+// Caso queira usar kadu4 em outra seção, mantenha importado, ou use onde preferir.
+// import kadu4Img from "../../../public/kadu4.jpg"; 
+
+// --- HOOK DE PARALLAX ---
 const useParallax = (speed = 0.5) => {
     const ref = useRef<HTMLDivElement>(null);
     const [offset, setOffset] = useState(0);
@@ -19,7 +24,6 @@ const useParallax = (speed = 0.5) => {
         const handleScroll = () => {
             if (!ref.current) return;
             const rect = ref.current.getBoundingClientRect();
-            // Otimização: só calcula se estiver visível na tela
             if (rect.top < window.innerHeight && rect.bottom > 0) {
                 const scrollY = window.scrollY;
                 const elementTop = rect.top + scrollY;
@@ -36,38 +40,36 @@ const useParallax = (speed = 0.5) => {
     return { ref, offset };
 };
 
-// --- COMPONENTE DO BOTÃO (EFEITO SMARTPOP) ---
-// Botão que expande/recolhe ao passar o mouse
+// --- BOTÃO WHATSAPP ---
 const WhatsAppCTA = () => (
     <div className="flex flex-col items-center justify-center w-full py-12">
         <a
-            href="https://wa.me/5561996780739?text=Olá,%20gostaria%20de%20agendar%20uma%20avaliação!"
+            href="https://wa.me/5561991557030?text=Olá%20Kadu,%20quero%20agendar%20uma%20expedição!"
             target="_blank"
             rel="noopener noreferrer"
             className="
-                group relative flex h-14 w-auto min-w-[220px] items-center justify-center 
-                overflow-hidden rounded-full bg-[#25D366] text-white shadow-xl 
-                transition-[width,min-width] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] 
-                hover:w-14 hover:min-w-[3.5rem]
-            "
+        group relative flex h-16 w-auto min-w-[240px] items-center justify-center 
+        overflow-hidden rounded-full bg-[#25D366] text-white shadow-2xl 
+        transition-[width,min-width] duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] 
+        hover:w-16 hover:min-w-[4rem] hover:bg-[#20bd5a]
+      "
         >
-            {/* Texto que desaparece ao passar o mouse */}
             <div className="absolute flex items-center justify-center gap-2 whitespace-nowrap transition-all duration-300 group-hover:opacity-0 group-hover:translate-x-10">
-                <span className="text-lg font-bold tracking-wide">Entrar em contato</span>
+                <span className="text-xl font-black uppercase tracking-wider">Bora Descer?</span>
             </div>
 
-            {/* Ícone de seta que aparece ao passar o mouse */}
             <div className="absolute flex items-center justify-center opacity-0 transition-all duration-500 delay-100 group-hover:opacity-100 group-hover:scale-100 scale-50">
-                <ArrowRight size={24} strokeWidth={3} />
+                <ArrowRight size={28} strokeWidth={4} />
             </div>
         </a>
     </div>
 );
 
-// --- DADOS DAS SEÇÕES (COM OS TEXTOS RESTAURADOS) ---
+// --- DADOS DAS SEÇÕES ---
 interface ParallaxSectionData {
     id: number;
-    videoSrc: string;
+    videoSrc?: string; // Agora é opcional
+    imageSrc?: StaticImageData; // Nova propriedade para imagem de fundo
     title: string;
     subtitle?: string;
     overlayGradient: string;
@@ -79,24 +81,23 @@ interface ParallaxSectionData {
 const sectionsData: ParallaxSectionData[] = [
     {
         id: 1,
-        videoSrc: "https://res.cloudinary.com/dutbdeta6/video/upload/C0004_-_Cor_fjxwyi.mp4",
-        title: "Carol Nantet",
-        subtitle: "Fisioterapia & Pilates",
-        overlayGradient: "linear-gradient(to bottom, rgba(39, 174, 96, 0.4) 0%, rgba(44, 62, 80, 0.9) 100%)",
-        contentTitle: "Excelência em Movimento",
-        // Texto restaurado
+        videoSrc: "/kadu.mp4",
+        title: "Kadu Aragão",
+        subtitle: "Instrutor Especialista em Verticalidade",
+        overlayGradient: "linear-gradient(to bottom, rgba(234, 88, 12, 0.3) 0%, rgba(24, 24, 27, 0.9) 100%)",
+        contentTitle: "Muito Mais Que Uma Trilha",
         contentBody: (
             <div className="space-y-6 text-center max-w-3xl mx-auto">
-                <p className="text-lg text-slate-600 leading-relaxed">
-                    Nossa metodologia une o melhor da fisioterapia clássica com a fluidez do Pilates moderno,
-                    proporcionando reabilitação eficaz e fortalecimento consciente. Tratamos cada paciente como único,
-                    respeitando seus limites e potencializando seus resultados.
+                <p className="text-lg text-slate-300 leading-relaxed">
+                    O canionismo te leva aonde a maioria não consegue chegar. Comigo, você acessa o coração da
+                    Chapada dos Veadeiros através de rapéis em cachoeiras, saltos em poços cristalinos e
+                    caminhadas técnicas. Tudo isso com a segurança de quem vive e respira a montanha.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 text-left">
-                    {['Avaliação Individualizada', 'Equipamentos de Ponta', 'Ambiente Acolhedor', 'Foco em Resultados'].map((item, i) => (
-                        <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
-                            <CheckCircle2 className="text-green-600 w-5 h-5 flex-shrink-0" />
-                            <span className="font-medium text-slate-700">{item}</span>
+                    {['Certificação Internacional', 'Equipamentos Homologados UIAA', 'Guiagem Personalizada', 'Fotos e Vídeos Inclusos'].map((item, i) => (
+                        <div key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10 hover:border-orange-500/50 transition-colors">
+                            <CheckCircle2 className="text-orange-500 w-5 h-5 flex-shrink-0" />
+                            <span className="font-medium text-slate-200">{item}</span>
                         </div>
                     ))}
                 </div>
@@ -105,28 +106,28 @@ const sectionsData: ParallaxSectionData[] = [
     },
     {
         id: 2,
-        videoSrc: "https://res.cloudinary.com/dutbdeta6/video/upload/C0005_-_Cor_kaatmg.mp4",
-        title: "Pilates Terapêutico",
-        overlayGradient: "linear-gradient(to bottom, rgba(52, 152, 219, 0.4) 0%, rgba(44, 62, 80, 0.9) 100%)",
-        contentTitle: "Corpo Forte, Mente Equilibrada",
-        // Texto restaurado
+        videoSrc: "/kadu2.mp4",
+        title: "Cânion do Macaquinho",
+        subtitle: "O Clássico da Adrenalina",
+        overlayGradient: "linear-gradient(to bottom, rgba(220, 38, 38, 0.3) 0%, rgba(24, 24, 27, 0.95) 100%)",
+        contentTitle: "Desafio Técnico e Visual Único",
         contentBody: (
             <div className="space-y-6 text-center max-w-3xl mx-auto">
-                <p className="text-lg text-slate-600 leading-relaxed">
-                    O Pilates Clínico não é apenas exercício, é uma ferramenta poderosa de reabilitação.
-                    Focamos no controle do "Power House", melhorando a postura, flexibilidade e tônus muscular
-                    sem impacto excessivo nas articulações.
+                <p className="text-lg text-slate-300 leading-relaxed">
+                    Uma fenda geológica impressionante que esconde uma sequência de quedas d'água perfeitas para o rapel.
+                    É uma expedição intensa, que exige disposição, mas recompensa com visuais que parecem de outro planeta.
+                    Prepare-se para se molhar e sentir a força da água.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 text-left">
                     {[
-                        'Correção Postural',
-                        'Definição Muscular',
-                        'Controle da Respiração',
-                        'Alívio de Tensões'
+                        'Rapel de 45 metros',
+                        'Natação em Cânion Estreito',
+                        'Nível: Avançado',
+                        'Duração: Dia Inteiro'
                     ].map((item, i) => (
-                        <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
-                            <Activity className="text-blue-500 w-5 h-5 flex-shrink-0" />
-                            <span className="font-medium text-slate-700">{item}</span>
+                        <div key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10 hover:border-red-500/50 transition-colors">
+                            <Mountain className="text-red-500 w-5 h-5 flex-shrink-0" />
+                            <span className="font-medium text-slate-200">{item}</span>
                         </div>
                     ))}
                 </div>
@@ -135,28 +136,28 @@ const sectionsData: ParallaxSectionData[] = [
     },
     {
         id: 3,
-        videoSrc: "https://res.cloudinary.com/dutbdeta6/video/upload/C0008_-_Cor_enbpmm.mp4",
-        title: "Fisioterapia Preventiva",
-        overlayGradient: "linear-gradient(to bottom, rgba(155, 89, 182, 0.4) 0%, rgba(44, 62, 80, 0.9) 100%)",
-        contentTitle: "Longevidade Ativa",
-        // Texto restaurado
+        videoSrc: "/kadu3.mp4",
+        title: "Santa Bárbara",
+        subtitle: "Águas Cristalinas e Diversão",
+        overlayGradient: "linear-gradient(to bottom, rgba(14, 165, 233, 0.3) 0%, rgba(24, 24, 27, 0.9) 100%)",
+        contentTitle: "Para Quem Busca Beleza Cênica",
         contentBody: (
             <div className="space-y-6 text-center max-w-3xl mx-auto">
-                <p className="text-lg text-slate-600 leading-relaxed">
-                    Não espere a dor limitar sua vida. Atuamos na prevenção de lesões identificando desequilíbrios
-                    musculares e padrões de movimento incorretos, garantindo que você continue praticando seus esportes
-                    e atividades diárias com segurança.
+                <p className="text-lg text-slate-300 leading-relaxed">
+                    Ideal para quem quer iniciar no canionismo ou busca um dia mais "relax" sem abrir mão da aventura.
+                    Aqui a água é transparente, os rapéis são divertidos e o cenário é paradisíaco. Perfeito para fotos
+                    e para curtir a energia da Chapada.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 text-left">
                     {[
-                        'Análise Biomecânica',
-                        'Prevenção de Lesões',
-                        'Melhora de Performance',
-                        'Autonomia Funcional'
+                        'Rapéis Positivos (Secos)',
+                        'Poços de Água Turquesa',
+                        'Nível: Iniciante/Intermediário',
+                        'Acesso Facilitado'
                     ].map((item, i) => (
-                        <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
-                            <ShieldCheck className="text-purple-600 w-5 h-5 flex-shrink-0" />
-                            <span className="font-medium text-slate-700">{item}</span>
+                        <div key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10 hover:border-cyan-500/50 transition-colors">
+                            <MapPin className="text-cyan-500 w-5 h-5 flex-shrink-0" />
+                            <span className="font-medium text-slate-200">{item}</span>
                         </div>
                     ))}
                 </div>
@@ -165,29 +166,27 @@ const sectionsData: ParallaxSectionData[] = [
     },
     {
         id: 4,
-        videoSrc: "https://res.cloudinary.com/dutbdeta6/video/upload/C0011_-_Cor_iwegdu.mp4",
-        title: "Viver Sem Dor",
-        overlayGradient: "linear-gradient(to bottom, rgba(192, 57, 43, 0.5) 0%, rgba(44, 62, 80, 0.95) 100%)",
-        badge: "Especialista em Dor",
-        contentTitle: "Tratamento de Dor Crônica",
-        // Texto restaurado
+        videoSrc: "/kadu4.mp4",
+        title: "Segurança Total",
+        overlayGradient: "linear-gradient(to bottom, rgba(16, 185, 129, 0.3) 0%, rgba(24, 24, 27, 0.95) 100%)",
+        badge: "Protocolos ISO",
+        contentTitle: "Sua Vida é a Prioridade",
         contentBody: (
             <div className="space-y-6 text-center max-w-3xl mx-auto">
-                <p className="text-lg text-slate-600 leading-relaxed">
-                    A dor crônica não deve ser normalizada. Utilizamos uma abordagem integrativa que combina
-                    terapia manual, liberação miofascial e exercícios específicos para tratar a causa raiz do problema,
-                    não apenas os sintomas.
+                <p className="text-lg text-slate-300 leading-relaxed">
+                    Aventura não significa perigo desnecessário. Trabalho seguindo rigorosos protocolos internacionais de gestão de risco (ISO 21101).
+                    Todos os equipamentos são inspecionados, temos kit de primeiros socorros completo (WFR) e comunicação via satélite para emergências.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 text-left">
                     {[
-                        'Hérnia de Disco',
-                        'Ciatalgia',
-                        'Dores Cervicais',
-                        'Reabilitação Pós-Cirúrgica'
+                        'Primeiros Socorros WFR',
+                        'Gestão de Risco ABNT',
+                        'Rastreamento via Satélite',
+                        'Seguro Aventura Incluso'
                     ].map((item, i) => (
-                        <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-100">
-                            <Sparkles className="text-red-500 w-5 h-5 flex-shrink-0" />
-                            <span className="font-medium text-slate-700">{item}</span>
+                        <div key={i} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10 hover:border-green-500/50 transition-colors">
+                            <ShieldCheck className="text-green-500 w-5 h-5 flex-shrink-0" />
+                            <span className="font-medium text-slate-200">{item}</span>
                         </div>
                     ))}
                 </div>
@@ -196,24 +195,39 @@ const sectionsData: ParallaxSectionData[] = [
     },
     {
         id: 5,
-        videoSrc: "https://res.cloudinary.com/dutbdeta6/video/upload/C0014_-_Cor_gdzvo9.mp4",
-        title: "Inicie Sua Transformação",
-        overlayGradient: "linear-gradient(to bottom, rgba(230, 126, 34, 0.4) 0%, rgba(44, 62, 80, 0.9) 100%)",
-        contentTitle: "Vamos Começar?",
-        contentBody: <WhatsAppCTA />, // Botão SmartPop
+        // --- AQUI ESTÁ A CORREÇÃO ---
+        // Removi o videoSrc e adicionei imageSrc para usar a foto como BACKGROUND da seção
+        imageSrc: kadu5Img,
+        title: "Sua Aventura Começa Agora",
+        overlayGradient: "linear-gradient(to bottom, rgba(234, 88, 12, 0.5) 0%, rgba(0, 0, 0, 1) 100%)",
+        contentTitle: "Vamos Agendar?",
+        contentBody: (
+            <div className="space-y-12">
+                <p className="text-center text-slate-300 text-lg max-w-2xl mx-auto leading-relaxed">
+                    As vagas por expedição são limitadas para garantir a segurança máxima e uma experiência exclusiva.
+                    Não deixe sua aventura apenas na imaginação.
+                </p>
+
+                {/* O Botão de WhatsApp */}
+                <div className="pt-2">
+                    <WhatsAppCTA />
+                </div>
+            </div>
+        ),
     },
 ];
 
-// --- COMPONENTES VISUAIS ---
-
+// --- COMPONENTE SLIDE PARALLAX (Agora aceita Imagem ou Vídeo) ---
 const ParallaxSlide = ({
     videoSrc,
+    imageSrc,
     title,
     subtitle,
     overlayGradient,
     badge
 }: {
-    videoSrc: string;
+    videoSrc?: string;
+    imageSrc?: StaticImageData;
     title: string;
     subtitle?: string;
     overlayGradient: string;
@@ -222,8 +236,8 @@ const ParallaxSlide = ({
     const { ref, offset } = useParallax(0.5);
 
     return (
-        <section ref={ref} className="relative h-screen w-full overflow-hidden bg-black">
-            {/* Camada do Vídeo */}
+        <section ref={ref} className="relative h-screen w-full overflow-hidden bg-black border-b border-white/5">
+            {/* Camada do Fundo (Vídeo ou Imagem) */}
             <div
                 className="absolute inset-0 w-full h-[120%]"
                 style={{
@@ -231,34 +245,47 @@ const ParallaxSlide = ({
                     willChange: 'transform'
                 }}
             >
-                <video
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full h-full object-cover"
-                >
-                    <source src={videoSrc} type="video/mp4" />
-                </video>
+                {imageSrc ? (
+                    // Renderiza Imagem se existir
+                    <Image
+                        src={imageSrc}
+                        alt={title}
+                        fill
+                        className="object-cover opacity-80"
+                        priority
+                    />
+                ) : (
+                    // Renderiza Vídeo se não houver imagem
+                    <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="w-full h-full object-cover opacity-80"
+                    >
+                        {videoSrc && <source src={videoSrc} type="video/mp4" />}
+                    </video>
+                )}
             </div>
 
-            {/* Overlays */}
-            <div className="absolute inset-0 z-[2] mix-blend-multiply pointer-events-none" style={{ background: overlayGradient }} />
-            <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-black/60 to-transparent z-[2] pointer-events-none" />
+            {/* Overlays de Contraste */}
+            <div className="absolute inset-0 z-[2] mix-blend-overlay pointer-events-none" style={{ background: overlayGradient }} />
+            <div className="absolute inset-0 z-[2] bg-black/40 pointer-events-none" /> {/* Escurece geral */}
+            <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent z-[2] pointer-events-none" />
 
-            {/* Conteúdo Central */}
+            {/* Conteúdo Central (Título) */}
             <div className="absolute inset-0 flex flex-col items-center justify-center z-[3] px-6">
-                <div className="w-full max-w-4xl mx-auto flex flex-col items-center text-center">
+                <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center">
                     {badge && (
-                        <span className="mb-6 bg-red-600 text-white px-6 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider shadow-lg backdrop-blur-sm animate-fade-in">
+                        <span className="mb-6 bg-orange-600 text-white px-6 py-2 rounded-full text-sm font-black uppercase tracking-widest shadow-[0_0_20px_rgba(234,88,12,0.5)] backdrop-blur-md animate-pulse">
                             {badge}
                         </span>
                     )}
-                    <h1 className="text-white text-4xl sm:text-5xl md:text-7xl font-extrabold mb-4 tracking-tight drop-shadow-2xl">
+                    <h1 className="text-white text-5xl sm:text-6xl md:text-8xl font-black mb-6 tracking-tighter drop-shadow-2xl uppercase">
                         {title}
                     </h1>
                     {subtitle && (
-                        <p className="text-white/90 text-xl sm:text-2xl md:text-3xl font-light tracking-wide max-w-2xl drop-shadow-md">
+                        <p className="text-orange-100/90 text-xl sm:text-2xl md:text-3xl font-bold tracking-wide max-w-3xl drop-shadow-md border-b-2 border-orange-500 pb-2">
                             {subtitle}
                         </p>
                     )}
@@ -269,21 +296,21 @@ const ParallaxSlide = ({
 };
 
 const ContentSection = ({ title, children }: { title: string; children: React.ReactNode }) => {
-    // Se não houver conteúdo, não renderiza a seção (evita faixas brancas vazias)
     if (!children) return null;
 
     return (
-        <section className="py-20 md:py-28 bg-white relative z-10 overflow-hidden">
+        <section className="py-24 md:py-32 bg-zinc-950 relative z-10 overflow-hidden">
             <div className="max-w-4xl mx-auto px-6">
                 {title && (
-                    <div className="text-center mb-12">
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-5xl font-black text-white mb-4 tracking-tight uppercase">
                             {title}
                         </h2>
-                        <div className="w-20 h-1.5 bg-gradient-to-r from-green-500 to-teal-500 mx-auto rounded-full"></div>
+                        <div className="w-24 h-2 bg-gradient-to-r from-orange-600 to-red-600 mx-auto rounded-full"></div>
                     </div>
                 )}
-                <div className="text-slate-600">
+                {/* Conteúdo do corpo */}
+                <div>
                     {children}
                 </div>
             </div>
@@ -291,9 +318,9 @@ const ContentSection = ({ title, children }: { title: string; children: React.Re
     );
 };
 
-export default function ParallaxPage() {
+export default function ParallaxCanyoning() {
     return (
-        <div className="w-full font-sans antialiased bg-black">
+        <div className="w-full font-sans antialiased bg-black selection:bg-orange-500 selection:text-white">
             <main>
                 {sectionsData.map((section) => (
                     <div key={section.id} className="relative z-0">

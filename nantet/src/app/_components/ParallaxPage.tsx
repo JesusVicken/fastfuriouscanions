@@ -106,7 +106,7 @@ const sectionsData: ParallaxSectionData[] = [
     },
     {
         id: 2,
-        videoSrc: "/kadu2.mp4",
+        videoSrc: "/kadu7.mp4",
         title: "Cânion do Macaquinho",
         subtitle: "O Clássico da Adrenalina",
         overlayGradient: "linear-gradient(to bottom, rgba(220, 38, 38, 0.3) 0%, rgba(24, 24, 27, 0.95) 100%)",
